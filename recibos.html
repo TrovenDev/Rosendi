@@ -162,10 +162,6 @@ function imprimir(tipo) {
       ${st.pagador ? `<p>Pagador: <b>${esc(st.pagador)}</b></p>` : ''}
       <p>Emitido em ${hoje}</p>
       <table style="width:100%;border-collapse:collapse">${tabelaGeral(sel)}</table>
-      <p style="margin-top:4mm"><b>Detalhado:</b></p>
-      <table style="width:100%;border-collapse:collapse">
-        ${sel.map(i => `<tr><td>${esc(i.item)} ${esc(i.ref)}</td><td>${dt(i.data)}</td><td>${esc(i.sit)}</td><td class="v" style="text-align:right">${brl(i.valor)}</td></tr>`).join('')}
-      </table>
       </div>`;
   }
   $('print').innerHTML = h;
