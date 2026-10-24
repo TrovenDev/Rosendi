@@ -33,7 +33,9 @@
     #print { display:block; font-family: Arial, sans-serif; color:#000; }
     .rec { border:1.5px dashed #000; padding:10mm; margin-bottom:8mm; page-break-inside:avoid; break-inside:avoid; }
     .rec h2 { margin:0 0 4mm; font-size:18pt; text-align:center; letter-spacing:2px; }
-    .rec .val { font-size:16pt; font-weight:bold; text-align:right; margin-bottom:4mm; }
+    .rec .item { font-size:48pt; font-weight:bold; text-align:center; line-height:1.1; margin:6mm 0 2mm; text-transform:uppercase; }
+    .rec .refer { font-size:22pt; text-align:center; margin-bottom:4mm; }
+    .rec .val { font-size:20pt; font-weight:bold; text-align:center; margin-bottom:4mm; }
     .rec p { font-size:12pt; line-height:1.6; margin:2mm 0; }
     .rec .ass { margin-top:12mm; text-align:center; }
     .rec .ass div { border-top:1px solid #000; width:70%; margin:0 auto; padding-top:2mm; font-size:10pt; }
@@ -125,9 +127,10 @@ function agrupar(lista) {
 
 function tabelaGeral(lista) {
   const t = lista.reduce((s,i) => s + i.valor, 0);
-  return '<tr><th>Item</th><th>Qtd</th><th class="v">Total</th></tr>' +
-    agrupar(lista).map(([k,v]) => `<tr><td>${esc(k)}</td><td>${v.qtd}</td><td class="v">${brl(v.total)}</td></tr>`).join('') +
-    `<tr class="tot"><td>TOTAL GERAL</td><td>${lista.length}</td><td class="v">${brl(t)}</td></tr>`;
+  const ord = [...lista].sort((a,b) => a.item.localeCompare(b.item) || (a.ref||'').localeCompare(b.ref||''));
+  return '<tr><th>Item</th><th class="v">Valor</th></tr>' +
+    ord.map(i => `<tr><td>${esc(i.item)}${i.ref ? ' ' + esc(i.ref) : ''}</td><td class="v">${brl(i.valor)}</td></tr>`).join('') +
+    `<tr class="tot"><td>TOTAL GERAL</td><td class="v">${brl(t)}</td></tr>`;
 }
 
 function render() {
@@ -143,9 +146,9 @@ function render() {
 function recibo(i) {
   return `<div class="rec">
     <h2>RECIBO</h2>
+    <div class="item">${esc(i.item)}</div>
+    ${i.ref ? `<div class="refer">${esc(i.ref)}</div>` : ''}
     <div class="val">${brl(i.valor)}</div>
-    <p>Paguei a importância de <b>${brl(i.valor)}</b>,
-      referente a <b>${esc(i.item)}</b>${i.ref ? ' (' + esc(i.ref) + ')' : ''}.</p>
     <p>Situação: <b>${esc(i.sit).toUpperCase()}</b> &nbsp;—&nbsp; Data do pagamento: <b>${dt(i.data)}</b></p>
   </div>`;
 }
