@@ -53,7 +53,6 @@
   <div class="card">
     <div class="bar" style="margin-bottom:12px">
       <label style="flex:1">Pagador (recebi de)<input id="pagador" placeholder="Nome de quem pagou"></label>
-      <label style="flex:1">Recebedor<input id="recebedor" placeholder="Nome de quem recebeu"></label>
     </div>
     <form id="f">
       <label>Item<input id="item" list="sug" required placeholder="Ex: IPTU"></label>
@@ -102,9 +101,8 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const salvar = () => { try { localStorage.setItem(K, JSON.stringify(st)); } catch(e) {} };
 
 $('data').value = new Date().toISOString().slice(0,10);
-$('pagador').value = st.pagador; $('recebedor').value = st.recebedor;
+$('pagador').value = st.pagador;
 $('pagador').oninput = e => { st.pagador = e.target.value; salvar(); };
-$('recebedor').oninput = e => { st.recebedor = e.target.value; salvar(); };
 
 $('f').onsubmit = e => {
   e.preventDefault();
@@ -149,7 +147,6 @@ function recibo(i) {
     <p>Recebi de <b>${esc(st.pagador) || '____________________'}</b> a importância de <b>${brl(i.valor)}</b>,
       referente a <b>${esc(i.item)}</b>${i.ref ? ' (' + esc(i.ref) + ')' : ''}.</p>
     <p>Situação: <b>${esc(i.sit).toUpperCase()}</b> &nbsp;—&nbsp; Data do pagamento: <b>${dt(i.data)}</b></p>
-    <div class="ass"><div>${esc(st.recebedor) || 'Assinatura'}</div></div>
   </div>`;
 }
 
@@ -165,12 +162,7 @@ function imprimir(tipo) {
       ${st.pagador ? `<p>Pagador: <b>${esc(st.pagador)}</b></p>` : ''}
       <p>Emitido em ${hoje}</p>
       <table style="width:100%;border-collapse:collapse">${tabelaGeral(sel)}</table>
-      <p style="margin-top:4mm"><b>Detalhado:</b></p>
-      <table style="width:100%;border-collapse:collapse">
-        ${sel.map(i => `<tr><td>${esc(i.item)} ${esc(i.ref)}</td><td>${dt(i.data)}</td><td>${esc(i.sit)}</td><td class="v" style="text-align:right">${brl(i.valor)}</td></tr>`).join('')}
-      </table>
-      <div class="ass"><div>${esc(st.recebedor) || 'Assinatura'}</div></div>
-    </div>`;
+      </div>`;
   }
   $('print').innerHTML = h;
   window.print();
