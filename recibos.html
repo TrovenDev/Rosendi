@@ -144,7 +144,7 @@ function recibo(i) {
   return `<div class="rec">
     <h2>RECIBO</h2>
     <div class="val">${brl(i.valor)}</div>
-    <p>Recebi de <b>${esc(st.pagador) || '____________________'}</b> a importância de <b>${brl(i.valor)}</b>,
+    <p>Paguei a importância de <b>${brl(i.valor)}</b>,
       referente a <b>${esc(i.item)}</b>${i.ref ? ' (' + esc(i.ref) + ')' : ''}.</p>
     <p>Situação: <b>${esc(i.sit).toUpperCase()}</b> &nbsp;—&nbsp; Data do pagamento: <b>${dt(i.data)}</b></p>
   </div>`;
